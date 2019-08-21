@@ -15,12 +15,40 @@
  */
 package showVersions;
 
+import jackAudio4Java.Server;
+import jackAudio4Java.types.Int;
+
+/**
+ *
+ */
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
+
+    public void initJack() throws Exception {
+        Server.initialize();
     }
 
+    public String getJniVersion(){
+        return String.format("%h",Server.jni_get_version());
+    }
+
+    public String getJackVersion(){
+        Int major = new Int(-1);
+        Int minor = new Int(-1);
+        Int micro = new Int(-1);
+        Int proto = new Int(-1);
+        Server.jack_get_version(major, minor, micro, proto);
+        return String.format("%d.%d.%d-%d",major.value, minor.value, micro.value, proto.value);
+    }
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        App app = new App();
+        try {
+            app.initJack();
+        } catch (Exception e) {
+            System.out.println("Could not initialize the DLL");
+        }
+
+        System.out.println("=== Java Native Interface version: "+ app.getJniVersion());
+        System.out.println("=== Jack Audio Server version: "+ app.getJackVersion());
+
     }
 }

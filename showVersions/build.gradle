@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
@@ -26,14 +23,17 @@ plugins {
 
 group 'de.free-creations'
 version '0.0-SNAPSHOT'
+sourceCompatibility = 1.8
 
 repositories {
+    //mavenLocal()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     mavenCentral()
 }
 
 dependencies {
     // This dependency is used by the application.
-    implementation 'com.google.guava:guava:27.1-jre'
+    implementation 'de.free-creations:jackAudio4Java:0.1-SNAPSHOT'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -44,20 +44,17 @@ application {
     mainClassName = 'showVersions.App'
 }
 
-task uberJar(type: Jar) {
-
-    archiveClassifier = 'uber'
-
-    from sourceSets.main.output
-
+jar {
+    // we'll build a fat-jar, containing all needed libraries, especially the jackAudio4Java library.
     dependsOn configurations.runtimeClasspath
     from {
         configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
     }
+
     manifest {
         attributes(
             'Main-Class': mainClassName,
-            'Implementation-Version': rootProject.version
+            'Implementation-Version': project.version
         )
     }
 }

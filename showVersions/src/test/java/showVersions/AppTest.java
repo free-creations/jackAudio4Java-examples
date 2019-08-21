@@ -3,12 +3,28 @@
  */
 package showVersions;
 
+import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertNotNull;
+
 
 public class AppTest {
-    @Test public void testAppHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+    private App classUnderTest;
+
+    @Before
+    public void setUp() throws Exception {
+        classUnderTest = new App();
+        classUnderTest.initJack();
+    }
+
+    @Test
+    public void getJackVersion() {
+        assertNotNull(classUnderTest.getJackVersion());
+    }
+
+    @Test
+    public void getJniVersion() {
+        assertNotNull(classUnderTest.getJniVersion());
     }
 }
