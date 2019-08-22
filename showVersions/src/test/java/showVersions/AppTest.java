@@ -15,7 +15,6 @@ public class AppTest {
     @Before
     public void setUp() throws Exception {
         classUnderTest = new App();
-        classUnderTest.initJack();
     }
 
     @Test
